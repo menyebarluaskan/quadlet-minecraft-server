@@ -1,3 +1,7 @@
+[Unit]
+Description=Minecraft Server with Tailscale
+After=network-online.target
+
 [Pod]
 # Change the following hostname int your intended tailscale machine name
 Hostname=mcserver
