@@ -1,0 +1,33 @@
+[Unit]
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+# Comment the two following lines if not using tailscale. 1/2
+Requires=minecraft-tailscale.service
+After=minecraft-tailscale.service
+
+[Container]
+Pod=minecraft.pod
+ContainerName=minecraft-server
+EnvironmentFile=minecraft-server.env
+
+Image=itzg/minecraft-server
+
+# Mount the extras directory that will contains minecraft service
+# additional configuration. Currently contains plugins file and
+# modrinth downloads
+Volume=./extras:/extras:Z
+
+# Comment the following lines if not using tailscale. 2/2
+Network=minecraft-tailscale.container
+
+# Health check configuration
+HealthCmd=mc-health
+HealthInterval=30s
+HealthTimeout=5s
+HealthRetries=20
+HealthStartPeriod=1m
+
+[Service]
+Restart=on-abnormal
+RestartSec=5

@@ -1,0 +1,34 @@
+[Unit]
+StartLimitIntervalSec=60
+StartLimitBurst=3
+After=network-online.target
+Wants=network-online.target
+
+[Container]
+Pod=minecraft.pod
+ContainerName=minecraft-tailscale
+EnvironmentFile=minecraft-tailscale.env
+
+Image=tailscale/tailscale:latest
+
+AddCapability=NET_ADMIN SYS_MODULE
+AddDevice=/dev/net/tun:/dev/net/tun
+
+# Add the following secret using
+# echo "<YOUR_TAILSCALE_AUTH_KEY>" | podman secret create ts_authkey -
+Secret=ts_authkey,type=env,target=TS_AUTHKEY
+
+# Health check configuration
+HealthCmd=tailscale status
+HealthInterval=30s
+HealthTimeout=10s
+HealthRetries=3
+HealthStartPeriod=15s
+
+[Service]
+# Current workaround for system warm up ensuring the tailscale won't fail on
+# system start up.
+ExecStartPre=sleep 10
+
+Restart=always
+RestartSec=5

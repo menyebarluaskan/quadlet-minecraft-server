@@ -1,0 +1,6 @@
+[Pod]
+# Change the following hostname int your intended tailscale machine name
+Hostname=mcserver
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,3 @@
+[Container]
+Volume=tailscale_data_state:/var/lib/tailscale:Z
+Volume=tailscale_data_config:/config:Z
